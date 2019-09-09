@@ -1,2 +1,4 @@
+![Build status](https://github.com/hencrice/upeen-rust-programming-homework/workflows/Rust/badge.svg "Status")
+
 # leetcode-rust
-Leet code solution in Rust
+Leet code solutions in Rust
