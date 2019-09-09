@@ -1,26 +1,30 @@
-pub fn reverse(x: i32) -> i32 {
-    let is_negative = x < 0;
-    let mut v = x.abs();
+pub struct Solution {}
 
-    let mut rev_x: i32 = 0;
+impl Solution {
+    pub fn reverse(x: i32) -> i32 {
+        let is_negative = x < 0;
+        let mut v = x.abs();
 
-    while v > 0 {
-        let digit = v % 10;
+        let mut rev_x: i32 = 0;
 
-        match rev_x.checked_mul(10) {
-            Some(res) => rev_x = res,
-            None => return 0,
+        while v > 0 {
+            let digit = v % 10;
+
+            match rev_x.checked_mul(10) {
+                Some(res) => rev_x = res,
+                None => return 0,
+            }
+
+            match rev_x.checked_add(digit) {
+                Some(res) => rev_x = res,
+                None => return 0
+            }
+
+            v = v / 10;
         }
 
-        match rev_x.checked_add(digit) {
-            Some(res) => rev_x = res,
-            None => return 0
-        }
-
-        v = v / 10;
+        if is_negative {-rev_x} else {rev_x}
     }
-
-    if is_negative {-rev_x} else {rev_x}
 }
 
 #[cfg(test)]
@@ -29,16 +33,16 @@ mod tests {
 
     #[test]
     fn reverse_positive() {
-        assert_eq!(reverse(123), 321);
+        assert_eq!(Solution::reverse(123), 321);
     }
 
     #[test]
     fn reverse_negative() {
-        assert_eq!(reverse(-123), -321);
+        assert_eq!(Solution::reverse(-123), -321);
     }
 
     #[test]
     fn reverse_overflows() {
-        assert_eq!(reverse(1534236469), 0);
+        assert_eq!(Solution::reverse(1534236469), 0);
     }
 }
