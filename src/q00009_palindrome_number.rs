@@ -14,7 +14,7 @@ impl Solution {
             while v > 0 {
                 let digit = v % 10;
                 digits.push(digit);
-                v = v / 10;
+                v /= 10;
             }
 
             let middle_index = if digits.len() % 2 == 0 {
@@ -24,8 +24,8 @@ impl Solution {
             };
             let left_half = &digits[0..middle_index];
             let right_half = &digits[middle_index..];
-            let mut it = left_half.iter().zip(right_half.iter().rev());
-            while let Some((l, r)) = it.next() {
+            let it = left_half.iter().zip(right_half.iter().rev());
+            for (l, r) in it {
                 if l != r {
                     return false;
                 }

@@ -20,7 +20,7 @@ impl Solution {
                 None => return 0,
             }
 
-            v = v / 10;
+            v /= 10;
         }
 
         if is_negative {
