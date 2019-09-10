@@ -17,13 +17,17 @@ impl Solution {
 
             match rev_x.checked_add(digit) {
                 Some(res) => rev_x = res,
-                None => return 0
+                None => return 0,
             }
 
             v = v / 10;
         }
 
-        if is_negative {-rev_x} else {rev_x}
+        if is_negative {
+            -rev_x
+        } else {
+            rev_x
+        }
     }
 }
 
