@@ -37,6 +37,7 @@ impl Solution {
     }
 }
 
+// pattern matching on char
 fn single_roman_to_abs(c: char) -> i32 {
     match c {
         'I' => 1,
