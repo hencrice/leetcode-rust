@@ -16,8 +16,7 @@ impl Solution {
                     // a larger roman number. For example, "IV" or "XXLIX"
                     // (even though the second case might not be a valid roman number).
                     to_add -= stacked_v;
-                }
-                else {
+                } else {
                     // Is this dead code?
                     // A: Apparently not. For example, "LXXX" requires us to push
                     // "L" back to the stack.
@@ -47,7 +46,7 @@ fn single_roman_to_abs(c: char) -> i32 {
         'C' => 100,
         'D' => 500,
         'M' => 1000,
-        _ => 0
+        _ => 0,
     }
 }
 
