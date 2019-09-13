@@ -3,3 +3,4 @@ pub mod q00007_reverse_integer;
 pub mod q00009_palindrome_number;
 pub mod q00013_roman_to_integer;
 pub mod q00014_longest_common_prefix;
+pub mod q00020_valid_parentheses;
