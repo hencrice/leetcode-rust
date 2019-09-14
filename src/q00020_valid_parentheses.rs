@@ -10,15 +10,27 @@ impl Solution {
             for c in s.chars() {
                 match c {
                     '(' | '[' | '{' => stack.push(c),
-                    ')' => if !pop_and_compare(&mut stack, '(') {return false},
-                    ']' => if !pop_and_compare(&mut stack, '[') {return false},
-                    '}' => if !pop_and_compare(&mut stack, '{') {return false},
+                    ')' => {
+                        if !pop_and_compare(&mut stack, '(') {
+                            return false;
+                        }
+                    }
+                    ']' => {
+                        if !pop_and_compare(&mut stack, '[') {
+                            return false;
+                        }
+                    }
+                    '}' => {
+                        if !pop_and_compare(&mut stack, '{') {
+                            return false;
+                        }
+                    }
                     _ => return false,
                 }
             }
 
             // made a mistake here, thought I can directly return true
-            stack.len() == 0
+            stack.is_empty()
         }
     }
 }
@@ -36,33 +48,21 @@ mod test {
 
     #[test]
     fn test_valid_empty() {
-        assert_eq!(
-            Solution::is_valid(String::from("")),
-            true
-        );
+        assert_eq!(Solution::is_valid(String::from("")), true);
     }
 
     #[test]
     fn test_valid() {
-        assert_eq!(
-            Solution::is_valid(String::from("({[([{[[]]}])]})")),
-            true
-        );
+        assert_eq!(Solution::is_valid(String::from("({[([{[[]]}])]})")), true);
     }
 
     #[test]
     fn test_invalid() {
-        assert_eq!(
-            Solution::is_valid(String::from("{{]]")),
-            false
-        );
+        assert_eq!(Solution::is_valid(String::from("{{]]")), false);
     }
 
     #[test]
     fn test_invalid_no_closing() {
-        assert_eq!(
-            Solution::is_valid(String::from("{")),
-            false
-        );
+        assert_eq!(Solution::is_valid(String::from("{")), false);
     }
 }
