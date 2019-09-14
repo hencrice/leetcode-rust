@@ -4,3 +4,4 @@ pub mod q00009_palindrome_number;
 pub mod q00013_roman_to_integer;
 pub mod q00014_longest_common_prefix;
 pub mod q00020_valid_parentheses;
+pub mod q00021_merge_2_sorted_list;
