@@ -19,13 +19,14 @@ impl ListNode {
 impl Solution {
     pub fn merge_two_lists(l1: Option<Box<ListNode>>, l2: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
         let (mut root, mut the_other_n) = match (l1, l2) {
-            (Some(_), None) => return l1,
-            (None, Some(_)) => return l2,
+            (Some(l1), None) => return Some(l1),
+            (None, Some(l2)) => return Some(l2),
             (Some(n1), Some(n2)) => {
                 if n1.val > n2.val {
-                    (l1, &mut l2)
+                    // TODO: Figure out a better way instead of unbox and box the value back
+                    (Some(n1), &mut Some(Box::new(n2)))
                 } else {
-                    (l2, &mut l1)
+                    (Some(n2), &mut Some(Box::new(n1)))
                 }
             },
             _ => return None,
@@ -41,7 +42,7 @@ impl Solution {
                         prev_n = &mut prev_n.unwrap().next;
                         (prev_n, the_other_n)
                     } else {
-                        prev_n.unwrap().next = *the_other_n;
+                        prev_n.unwrap().next = the_other_n;
                         the_other_n = &mut prev_n.unwrap().next;
                         prev_n = &mut prev_n.unwrap().next;
                         (prev_n, the_other_n)
