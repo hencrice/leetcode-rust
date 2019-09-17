@@ -1,3 +1,5 @@
+use std::mem;
+
 pub struct Solution {}
 
 // Definition for singly-linked list.
@@ -7,6 +9,8 @@ pub struct ListNode {
   pub next: Option<Box<ListNode>>
 }
 
+// https://doc.rust-lang.org/book/ch05-01-defining-structs.html
+// Note that if a ListNode is mutable then all the fields are mutable
 impl ListNode {
   #[inline]
   fn new(val: i32) -> Self {
@@ -16,49 +20,72 @@ impl ListNode {
     }
   }
 }
+
+// https://doc.rust-lang.org/std/mem/fn.replace.html
+
 impl Solution {
     pub fn merge_two_lists(l1: Option<Box<ListNode>>, l2: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
-        let (mut root, mut the_other_n) = match (l1, l2) {
-            (Some(l1), None) => return Some(l1),
-            (None, Some(l2)) => return Some(l2),
+
+        let (mut root, mut the_other_list) = match (&l1, &l2) {
+            (Some(_), None) => return l1,
+            (None, Some(_)) => return l2,
             (Some(n1), Some(n2)) => {
                 if n1.val > n2.val {
-                    // TODO: Figure out a better way instead of unbox and box the value back
-                    (Some(n1), &mut Some(Box::new(n2)))
+                    (l1, l2)
                 } else {
-                    (Some(n2), &mut Some(Box::new(n1)))
+                    (l2, l1)
                 }
             },
             _ => return None,
         };
 
-        // https://stackoverflow.com/questions/29672373/what-is-difference-between-mut-a-t-and-a-mut-t
-        let mut prev_n = &mut root;
+        // // we will bind `prev_n` to another `&mut Option<Box<ListNode>>`
+        // // so it needs to be mutable
+        let prev_n = &mut root;
+        let head_the_other_list = the_other_list;
 
         loop {
-            let (prev_n, the_other_n) = match (prev_n.unwrap().next, the_other_n) {
-                (Some(n), Some(t_n)) => {
-                    if n.val > t_n.val {
-                        prev_n = &mut prev_n.unwrap().next;
-                        (prev_n, the_other_n)
+            let (prev_n, head_the_other_list) = match (prev_n.as_ref().unwrap().next, &head_the_other_list) {
+                (Some(next), Some(head_node)) => {
+                    if next.val > head_node.val {
+                        (Some(next), Some(head_node))
                     } else {
-                        prev_n.unwrap().next = the_other_n;
-                        the_other_n = &mut prev_n.unwrap().next;
-                        prev_n = &mut prev_n.unwrap().next;
-                        (prev_n, the_other_n)
+                        (Some(*head_node), Some(next))
                     }
                 },
                 (Some(_), None) => {
                     // no more connecting needs to be done
+                    break;
+                },
+                (None, Some(_)) => {
+                    prev_n.unwrap().next = head_the_other_list;
                     break
                 },
-                (None, _) => {
-                    prev_n.unwrap().next = *the_other_n;
-                    break
-                },
+                (None, None) => break,
             };
-            ()
         }
+
+        // loop {
+        //     let (prev_n, the_other_node) = match (prev_n.as_mut(), the_other_node.as_mut()) {
+        //         (Some(prev_n), Some(the_other_node)) => {
+        //             if prev_n.val > the_other_node.val {
+        //                 (&mut prev_n.next, &mut Some(*the_other_node))
+        //             } else {
+        //                 let existing_next = mem::replace(&mut prev_n.next, Some(*the_other_node));
+        //                 (&mut prev_n.next, &mut existing_next)
+        //             }
+        //         },
+        //         (Some(_), None) => {
+        //             // no more connecting needs to be done
+        //             break
+        //         },
+        //         (None, Some(_)) => {
+        //             prev_n.unwrap().next = the_other_node;
+        //             break
+        //         },
+        //         (None, None) => break,
+        //     };
+        // }
 
         root
     }
