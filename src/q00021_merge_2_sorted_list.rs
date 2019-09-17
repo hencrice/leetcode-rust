@@ -26,7 +26,7 @@ impl ListNode {
 impl Solution {
     pub fn merge_two_lists(l1: Option<Box<ListNode>>, l2: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
 
-        let (mut root, mut the_other_list) = match (&l1, &l2) {
+        let (mut root, the_other_list) = match (&l1, &l2) {
             (Some(_), None) => return l1,
             (None, Some(_)) => return l2,
             (Some(n1), Some(n2)) => {
@@ -45,12 +45,13 @@ impl Solution {
         let head_the_other_list = the_other_list;
 
         loop {
-            let (prev_n, head_the_other_list) = match (prev_n.as_ref().unwrap().next, &head_the_other_list) {
+            let prev_n = prev_n.as_mut().unwrap();
+            let (prev_n, head_the_other_list) = match (prev_n.next.as_ref(), head_the_other_list.as_ref()) {
                 (Some(next), Some(head_node)) => {
                     if next.val > head_node.val {
                         (Some(next), Some(head_node))
                     } else {
-                        (Some(*head_node), Some(next))
+                        (Some(head_node), Some(next))
                     }
                 },
                 (Some(_), None) => {
@@ -58,7 +59,7 @@ impl Solution {
                     break;
                 },
                 (None, Some(_)) => {
-                    prev_n.unwrap().next = head_the_other_list;
+                    prev_n.next = head_the_other_list;
                     break
                 },
                 (None, None) => break,
