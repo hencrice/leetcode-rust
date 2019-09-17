@@ -46,6 +46,9 @@ impl Solution {
 
         loop {
             let prev_n = prev_n.as_mut().unwrap();
+
+            // the following won't work
+            // https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=8a2de1aff8dcfc8c447a8d369c988234
             let (prev_n, head_the_other_list) = match (prev_n.next.as_ref(), head_the_other_list.as_ref()) {
                 (Some(next), Some(head_node)) => {
                     if next.val > head_node.val {
