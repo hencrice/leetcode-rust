@@ -1,97 +1,44 @@
-use std::mem;
-
-pub struct Solution {}
-
 // Definition for singly-linked list.
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub struct ListNode {
-  pub val: i32,
-  pub next: Option<Box<ListNode>>
+    pub val: i32,
+    pub next: Option<Box<ListNode>>,
 }
 
 // https://doc.rust-lang.org/book/ch05-01-defining-structs.html
 // Note that if a ListNode is mutable then all the fields are mutable
+#[cfg(test)]
 impl ListNode {
-  #[inline]
-  fn new(val: i32) -> Self {
-    ListNode {
-      next: None,
-      val
+    #[inline]
+    fn new(val: i32) -> Self {
+        ListNode { next: None, val }
     }
-  }
 }
 
-// https://doc.rust-lang.org/std/mem/fn.replace.html
+pub struct Solution {}
 
 impl Solution {
-    pub fn merge_two_lists(l1: Option<Box<ListNode>>, l2: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+    pub fn merge_two_lists(
+        l1: Option<Box<ListNode>>,
+        l2: Option<Box<ListNode>>,
+    ) -> Option<Box<ListNode>> {
+        match (l1, l2) {
+            (n @ Some(_), None) => n,
+            (None, n @ Some(_)) => n,
+            (n1 @ Some(_), n2 @ Some(_)) => {
+                let mut v1 = n1.unwrap();
+                let mut v2 = n2.unwrap();
 
-        let (mut root, the_other_list) = match (&l1, &l2) {
-            (Some(_), None) => return l1,
-            (None, Some(_)) => return l2,
-            (Some(n1), Some(n2)) => {
-                if n1.val > n2.val {
-                    (l1, l2)
+                if v1.val < v2.val {
+                    v1.next = Solution::merge_two_lists(v1.next, Some(v2));
+                    Some(v1)
                 } else {
-                    (l2, l1)
+                    v2.next = Solution::merge_two_lists(Some(v1), v2.next);
+                    Some(v2)
                 }
-            },
-            _ => return None,
-        };
-
-        // // we will bind `prev_n` to another `&mut Option<Box<ListNode>>`
-        // // so it needs to be mutable
-        let prev_n = &mut root;
-        let head_the_other_list = the_other_list;
-
-        loop {
-            let prev_n = prev_n.as_mut().unwrap();
-
-            // the following won't work
-            // https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=8a2de1aff8dcfc8c447a8d369c988234
-            let (prev_n, head_the_other_list) = match (prev_n.next.as_ref(), head_the_other_list.as_ref()) {
-                (Some(next), Some(head_node)) => {
-                    if next.val > head_node.val {
-                        (Some(next), Some(head_node))
-                    } else {
-                        (Some(head_node), Some(next))
-                    }
-                },
-                (Some(_), None) => {
-                    // no more connecting needs to be done
-                    break;
-                },
-                (None, Some(_)) => {
-                    prev_n.next = head_the_other_list;
-                    break
-                },
-                (None, None) => break,
-            };
+            }
+            _ => None,
         }
-
-        // loop {
-        //     let (prev_n, the_other_node) = match (prev_n.as_mut(), the_other_node.as_mut()) {
-        //         (Some(prev_n), Some(the_other_node)) => {
-        //             if prev_n.val > the_other_node.val {
-        //                 (&mut prev_n.next, &mut Some(*the_other_node))
-        //             } else {
-        //                 let existing_next = mem::replace(&mut prev_n.next, Some(*the_other_node));
-        //                 (&mut prev_n.next, &mut existing_next)
-        //             }
-        //         },
-        //         (Some(_), None) => {
-        //             // no more connecting needs to be done
-        //             break
-        //         },
-        //         (None, Some(_)) => {
-        //             prev_n.unwrap().next = the_other_node;
-        //             break
-        //         },
-        //         (None, None) => break,
-        //     };
-        // }
-
-        root
     }
 }
 
@@ -100,7 +47,78 @@ mod test {
     use super::*;
 
     #[test]
-    fn test_valid_empty() {
-        assert_eq!(true, true);
+    fn test_2_empty_lists() {
+        assert_eq!(Solution::merge_two_lists(None, None), None);
+    }
+
+    #[test]
+    fn test_l1_1_node_list() {
+        assert_eq!(
+            Solution::merge_two_lists(Some(Box::new(ListNode::new(30))), None),
+            Some(Box::new(ListNode::new(30)))
+        );
+    }
+
+    #[test]
+    fn test_l2_1_node_list() {
+        assert_eq!(
+            Solution::merge_two_lists(None, Some(Box::new(ListNode::new(10)))),
+            Some(Box::new(ListNode::new(10)))
+        );
+    }
+
+    #[test]
+    fn test_l1_smaller_than_l2() {
+        assert_eq!(
+            Solution::merge_two_lists(
+                Some(Box::new(ListNode::new(1))),
+                Some(Box::new(ListNode::new(2)))
+            ),
+            Some(Box::new(ListNode {
+                val: 1,
+                next: Some(Box::new(ListNode { val: 2, next: None }))
+            }))
+        );
+    }
+
+    #[test]
+    fn test_l2_smaller_than_l1() {
+        assert_eq!(
+            Solution::merge_two_lists(
+                Some(Box::new(ListNode::new(2))),
+                Some(Box::new(ListNode::new(1)))
+            ),
+            Some(Box::new(ListNode {
+                val: 1,
+                next: Some(Box::new(ListNode { val: 2, next: None }))
+            }))
+        );
+    }
+
+    #[test]
+    fn test_2_node_lists() {
+        assert_eq!(
+            Solution::merge_two_lists(
+                Some(Box::new(ListNode {
+                    val: 1,
+                    next: Some(Box::new(ListNode { val: 3, next: None }))
+                })),
+                Some(Box::new(ListNode {
+                    val: 2,
+                    next: Some(Box::new(ListNode { val: 4, next: None }))
+                }))
+            ),
+            // TODO: figure out another way to do this horrendous linked list construction
+            Some(Box::new(ListNode {
+                val: 1,
+                next: Some(Box::new(ListNode {
+                    val: 2,
+                    next: Some(Box::new(ListNode {
+                        val: 3,
+                        next: Some(Box::new(ListNode { val: 4, next: None }))
+                    }))
+                }))
+            }))
+        );
     }
 }
