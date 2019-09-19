@@ -2,7 +2,7 @@ pub struct Solution {}
 
 impl Solution {
     pub fn remove_duplicates(nums: &mut Vec<i32>) -> i32 {
-        if nums.len() == 0 {
+        if nums.is_empty() {
             0
         } else {
             let mut shift_to_index = 0;
