@@ -58,7 +58,7 @@ jobs:
             component: rustfmt
       - uses: actions-rs/cargo@v1
         with:
-          command: fmt
+          command: ${{ steps.component.outputs.command }}
           args: --all -- --check
 
   clippy:
@@ -78,7 +78,7 @@ jobs:
             component: clippy
       - uses: actions-rs/cargo@v1
         with:
-          command: clippy
+          command: ${{ steps.component.outputs.command }}
           args: -- -D warnings
 
   build:
