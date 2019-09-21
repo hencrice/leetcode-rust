@@ -53,6 +53,8 @@ jobs:
         with:
           toolchain: nightly
           override: true
+      - name: Print Rust version
+        run: rustup show
       - uses: actions-rs/cargo@v1
         with:
           command: test
