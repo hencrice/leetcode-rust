@@ -1,4 +1,4 @@
-name: Rust
+name: Rust CI
 
 on:
   push:
@@ -9,21 +9,89 @@ on:
       - master
 
 jobs:
-  build:
+  check:
+    name: Check
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
-        rust: [stable]
     runs-on: ${{ matrix.os }}
     steps:
-    - name: Set up a Rust toolchain
-      uses: hecrj/setup-rust-action@v1.1.0
-      with:
-        rust-version: ${{ matrix.rust }}
-    - uses: actions/checkout@v1
-    - name: Build
-      run: cargo build --verbose
-    - name: Run tests
-      run: cargo test --verbose
-    - name: Run linter
-      run: rustup component add clippy && cargo clippy --verbose
+      - uses: actions/checkout@v1
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+      - uses: actions-rs/cargo@v1
+        with:
+          command: check
+
+  test:
+    name: Test Suite
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+      - uses: actions-rs/cargo@v1
+        with:
+          command: test
+
+  fmt:
+    name: Nightly Rustfmt
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - id: component
+        uses: actions-rs/components-nightly@v1
+        with:
+          target: x86_64-unknown-linux-gnu
+          component: rustfmt
+      - uses: actions-rs/toolchain@v1
+        with:
+            toolchain: ${{ steps.component.outputs.toolchain }}
+            override: true
+      - uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -- --check
+
+  clippy:
+    name: Nightly Clippy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - id: component
+        uses: actions-rs/components-nightly@v1
+        with:
+          target: x86_64-unknown-linux-gnu
+          component: clippy
+      - uses: actions-rs/toolchain@v1
+        with:
+            toolchain: ${{ steps.component.outputs.toolchain }}
+            override: true
+      - uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: -- -D warnings
+
+  build:
+    name: Build
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+      - uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --all-features
