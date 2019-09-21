@@ -93,7 +93,7 @@ jobs:
         with:
             toolchain: ${{ steps.component.outputs.toolchain }}
             override: true
-            component: clippy
+            component: clippy rustfmt
       - uses: actions-rs/cargo@v1
         with:
           command: ${{ steps.component.outputs.command }}
