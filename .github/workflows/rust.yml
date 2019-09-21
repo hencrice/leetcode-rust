@@ -51,7 +51,7 @@ jobs:
         with:
           target: x86_64-unknown-linux-gnu
           component: rustfmt
-      - uses: hencrice/toolchain@9aeef8b
+      - uses: hencrice/toolchain@e80da8a
         with:
             toolchain: ${{ steps.component.outputs.toolchain }}
             override: true
@@ -71,7 +71,7 @@ jobs:
         with:
           target: x86_64-unknown-linux-gnu
           component: clippy
-      - uses: hencrice/toolchain@9aeef8b
+      - uses: hencrice/toolchain@e80da8a
         with:
             toolchain: ${{ steps.component.outputs.toolchain }}
             override: true
