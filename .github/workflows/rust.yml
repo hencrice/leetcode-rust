@@ -17,7 +17,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v1
-      - uses: actions-rs/toolchain@v1
+      - uses: hencrice/toolchain@9aeef8b
         with:
           toolchain: stable
           override: true
@@ -33,7 +33,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v1
-      - uses: actions-rs/toolchain@v1
+      - uses: hencrice/toolchain@9aeef8b
         with:
           toolchain: stable
           override: true
@@ -55,6 +55,7 @@ jobs:
         with:
             toolchain: ${{ steps.component.outputs.toolchain }}
             override: true
+            component: rustfmt
       - uses: actions-rs/cargo@v1
         with:
           command: fmt
@@ -74,6 +75,7 @@ jobs:
         with:
             toolchain: ${{ steps.component.outputs.toolchain }}
             override: true
+            component: clippy
       - uses: actions-rs/cargo@v1
         with:
           command: clippy
