@@ -8,3 +8,4 @@ pub mod q00021_merge_2_sorted_list;
 pub mod q00026_remove_duplicates_from_sorted_array;
 pub mod q00027_remove_element;
 pub mod q00028_implement_str_str;
+pub mod q00035_search_insert_position;
