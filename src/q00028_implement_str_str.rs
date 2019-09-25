@@ -22,21 +22,30 @@ mod test {
 
     #[test]
     fn test_ll_in_hello() {
-        assert_eq!(Solution::str_str(String::from("hello"), String::from("ll")), 2);
+        assert_eq!(
+            Solution::str_str(String::from("hello"), String::from("ll")),
+            2
+        );
     }
 
     #[test]
     fn test_empty_needle() {
-        assert_eq!(Solution::str_str(String::from("hello"), String::from("")), 0);
+        assert_eq!(
+            Solution::str_str(String::from("hello"), String::from("")),
+            0
+        );
     }
 
     #[test]
     fn test_not_found() {
-        assert_eq!(Solution::str_str(String::from("aaaaa"), String::from("ll")), -1);
-    } 
+        assert_eq!(
+            Solution::str_str(String::from("aaaaa"), String::from("ll")),
+            -1
+        );
+    }
 
     #[test]
     fn test_empty_haystack() {
         assert_eq!(Solution::str_str(String::from(""), String::from("ll")), -1);
-    } 
+    }
 }
