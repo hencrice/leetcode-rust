@@ -20,11 +20,11 @@ impl NumAndCount {
 impl Solution {
     pub fn count_and_say(n: i32) -> String {
         if n == 1 {
-            // this is the basecase
+            // directly return the result for the base case
             return String::from("1");
         }
 
-        //
+        // for the other cases, first recursively obtain the previous count_and_say result
         let prev_count = Solution::count_and_say(n - 1);
         let nums_and_counts: Vec<NumAndCount> = prev_count
             .chars()
