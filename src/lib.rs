@@ -9,3 +9,4 @@ pub mod q00026_remove_duplicates_from_sorted_array;
 pub mod q00027_remove_element;
 pub mod q00028_implement_str_str;
 pub mod q00038_count_and_say;
+pub mod q00053_maximum_subarray;
