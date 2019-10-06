@@ -11,3 +11,4 @@ pub mod q00028_implement_str_str;
 pub mod q00038_count_and_say;
 pub mod q00053_maximum_subarray;
 pub mod q00058_length_of_last_word;
+pub mod q00066_plus_one;
