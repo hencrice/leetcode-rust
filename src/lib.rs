@@ -14,3 +14,4 @@ pub mod q00058_length_of_last_word;
 pub mod q00066_plus_one;
 pub mod q00067_add_binary;
 pub mod q00070_climbing_stairs;
+pub mod q00509_fibonacci_number;
