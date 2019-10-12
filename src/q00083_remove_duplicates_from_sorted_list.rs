@@ -35,7 +35,7 @@ impl Solution {
         };
 
         let mut h = head;
-        // study ln 40, 41, 43, 46. Especially the usage of 
+        // study ln 40, 41, 43, 46. Especially the usage of
         // as_mut()
         let mut node = h.as_mut().unwrap();
         while let Some(next_n) = node.next.as_mut() {
