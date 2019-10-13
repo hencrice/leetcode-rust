@@ -15,35 +15,22 @@ impl ListNode {
 }
 impl Solution {
     pub fn delete_duplicates(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
-        // if head.is_none() {
-        //     return None;
-        // }
-        // let mut h = head;
-        // let mut p1 = h.as_mut().unwrap();
-        // while let Some(p2) = p1.next.as_mut() {
-        //     if p1.val == p2.val {
-        //         p1.next = p2.next.take();
-        //     } else {
-        //         p1 = p1.next.as_mut().unwrap();
-        //     }
-        // }
-        // h
-
-        let mut cur_val = match &head {
-            Some(n) => n.val,
-            _ => return None,
-        };
-
+        if head.is_none() {
+            return None;
+        }
         let mut h = head;
-        // study ln 40, 41, 43, 46. Especially the usage of
-        // as_mut()
-        let mut node = h.as_mut().unwrap();
-        while let Some(next_n) = node.next.as_mut() {
-            if next_n.val == cur_val {
-                node.next = next_n.next.take();
+        let mut p1 = h.as_mut().unwrap();
+
+        while let Some(p2) = p1.next.as_mut() {
+            if p1.val == p2.val {
+                // skip the current p2 such that after
+                // this loop, the Boxed value it refers
+                // to will be deallocated
+                p1.next = p2.next.take();
             } else {
-                cur_val = next_n.val;
-                node = node.next.as_mut().unwrap();
+                // p1 = p2; // borrow check failed. Asked on Stackoverflow:
+                // https://stackoverflow.com/questions/58359684/mutable-borrow-starts-here-in-previous-iteration-of-loop-for-leetcode-problem
+                p1 = p1.next.as_mut().unwrap();
             }
         }
         h
