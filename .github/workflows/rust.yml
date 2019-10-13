@@ -99,6 +99,25 @@ jobs:
           command: ${{ steps.component.outputs.command }}
           args: -- -D warnings
 
+  audio:
+    name: Audio
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - id: component
+        uses: actions-rs/components-nightly@v1
+        with:
+          target: x86_64-unknown-linux-gnu
+          component: cargo-audit
+      - uses: hencrice/toolchain@e80da8a
+        with:
+            toolchain: ${{ steps.component.outputs.toolchain }}
+            override: true
+            component: cargo-audit
+      - uses: actions-rs/cargo@v1
+        with:
+          command: audit
+
   build:
     name: Build
     strategy:
