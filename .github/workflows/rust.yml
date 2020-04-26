@@ -24,7 +24,8 @@ jobs:
           override: true
       - name: Print Rust version
         run: rustup show
-      - uses: actions-rs/cargo@v1
+      - name: cargo fmt
+        uses: actions-rs/cargo@v1
         with:
           command: fmt
           args: --all -- --check
