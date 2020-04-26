@@ -21,6 +21,7 @@ jobs:
         with:
           toolchain: stable
           override: true
+          components: rustfmt, clippy
       - name: Print Rust version
         run: rustup show
       - name: cargo fmt
@@ -57,9 +58,9 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions-rs/toolchain@v1
         with:
-          profile: default
           toolchain: nightly
           override: true
+          components: rustfmt, clippy
       - name: Print Rust version
         run: rustup show
       - name: cargo fmt
