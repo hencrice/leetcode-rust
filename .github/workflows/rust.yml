@@ -66,8 +66,8 @@ jobs:
         with:
           command: fmt
           args: --all -- --check
-      - uses: 
-        with: actions-rs/cargo@v1
+      - uses: actions-rs/cargo@v1 
+        with:
           command: clippy
           args: --all-targets --all-features -- -D warnings
       - uses: actions-rs/cargo@v1
