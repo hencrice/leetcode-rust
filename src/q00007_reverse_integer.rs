@@ -47,6 +47,6 @@ mod tests {
 
     #[test]
     fn reverse_overflows() {
-        assert_eq!(Solution::reverse(1534236469), 0);
+        assert_eq!(Solution::reverse(1_534_236_469), 0);
     }
 }
