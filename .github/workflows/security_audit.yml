@@ -1,4 +1,4 @@
-name: Security audit
+name: Security Audit
 on:
   schedule:
     # runs every Friday at 12 AM
