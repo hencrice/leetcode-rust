@@ -6,6 +6,36 @@ on:
       - master
 
 jobs:
+  clippy:
+    name: Lint the code using Clippy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          components: clippy
+      - name: Print Rust version
+        run: rustup show
+      - name: Stable Clippy on PR
+        uses: actions-rs/clippy-check@v1
+        with:
+            token: ${{ secrets.GITHUB_TOKEN }}
+            args: --all-targets --all-features
+      - uses: actions-rs/toolchain@v1
+        with:
+            toolchain: nightly
+            override: true
+            components: clippy
+      - name: Print Rust version
+        run: rustup show
+      - name: Nightly Clippy on PR
+        uses: actions-rs/clippy-check@v1
+        with:
+            token: ${{ secrets.GITHUB_TOKEN }}
+            args: --all-targets --all-features
+
   verify_with_stable:
     name: Verify using the stable toolchain
     strategy:
@@ -18,7 +48,7 @@ jobs:
         with:
           toolchain: stable
           override: true
-          components: rustfmt, clippy
+          components: rustfmt
       - name: Print Rust version
         run: rustup show
       - name: cargo fmt
@@ -26,11 +56,6 @@ jobs:
         with:
           command: fmt
           args: --all -- --check
-      - name: cargo clippy on PR
-        uses: actions-rs/clippy-check@v1
-        with:
-            token: ${{ secrets.GITHUB_TOKEN }}
-            args: --all-targets --all-features
       - name: cargo check
         uses: actions-rs/cargo@v1
         with:
@@ -57,7 +82,7 @@ jobs:
         with:
           toolchain: nightly
           override: true
-          components: rustfmt, clippy
+          components: rustfmt
       - name: Print Rust version
         run: rustup show
       - name: cargo fmt
@@ -65,11 +90,6 @@ jobs:
         with:
           command: fmt
           args: --all -- --check
-      - name: cargo clippy on PR
-        uses: actions-rs/clippy-check@v1
-        with:
-            token: ${{ secrets.GITHUB_TOKEN }}
-            args: --all-targets --all-features
       - name: cargo check
         uses: actions-rs/cargo@v1
         with:
